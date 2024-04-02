@@ -10,10 +10,11 @@ users = [{
 }, {'name': 'Kseniya',
     'email': 'k.sadovskaya2022@gmail.com@yandex.ru',
     'password': 'pass-kseniya-2024', }]
+active_user = None
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'users': users})
 
 
 def registration(request):
@@ -31,7 +32,34 @@ def registration_check(request):
     password = request.GET['password']
     if all([x['name'] != name for x in users]):
         users.append({'name': name, 'email': email, 'password': password})
-        message = f'Success {users}'
+        message = 'Success'
+        url = 'http://127.0.0.1:8000/'
     else:
         message = f'A user named "{name}" already exists'
-    return render(request, 'registration_check.html', context={'message': message})
+        url = 'http://127.0.0.1:8000/registration/'
+    return render(request, 'registration_check.html', context={'message': message, 'url': url})
+
+
+def login_check(request):
+    global message, active_user
+    email = request.GET['email']
+    password = request.GET['password']
+    if any([x['email'] == email for x in users] and [x['password'] == password for x in users]):
+        message = 'Success'
+        url = f'http://127.0.0.1:8000/login/user/{email}/'
+        for i in users:
+            if email == i['email']:
+                active_user = i['name']
+    else:
+        url = 'http://127.0.0.1:8000/login/'
+        message = 'Invalid email or password'
+    return render(request, 'login_check.html', context={'message': message, 'url': url, 'name': active_user})
+
+
+def user_page(request, email):
+    if any(x['email'] == email for x in users):
+        print(any(x['email'] == email for x in users))
+        return render(request, 'page_user.html')
+    else:
+        print(any(x['email'] == email for x in users))
+        return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
