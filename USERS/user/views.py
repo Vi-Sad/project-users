@@ -7,9 +7,13 @@ users = [{
     'name': 'Victoria',
     'email': 'sadovskaya.vicka@yandex.ru',
     'password': 'pass-victoria-2024',
-}, {'name': 'Kseniya',
+    'posts': [],
+}, {
+    'name': 'Kseniya',
     'email': 'k.sadovskaya2022@gmail.com@yandex.ru',
-    'password': 'pass-kseniya-2024', }]
+    'password': 'pass-kseniya-2024',
+    'posts': [],
+}]
 active_user = None
 
 
@@ -31,7 +35,7 @@ def registration_check(request):
     email = request.GET['email']
     password = request.GET['password']
     if all([x['name'] != name for x in users]):
-        users.append({'name': name, 'email': email, 'password': password})
+        users.append({'name': name, 'email': email, 'password': password, 'posts': []})
         message = 'Success'
         url = 'http://127.0.0.1:8000/'
     else:
@@ -45,21 +49,26 @@ def login_check(request):
     email = request.GET['email']
     password = request.GET['password']
     if any([x['email'] == email for x in users] and [x['password'] == password for x in users]):
-        message = 'Success'
-        url = f'http://127.0.0.1:8000/login/user/{email}/'
         for i in users:
             if email == i['email']:
                 active_user = i['name']
+        message = 'Success'
+        url = f'http://127.0.0.1:8000/login/user/{active_user}/'
     else:
         url = 'http://127.0.0.1:8000/login/'
         message = 'Invalid email or password'
-    return render(request, 'login_check.html', context={'message': message, 'url': url, 'name': active_user})
+    return render(request, 'login_check.html', context={'message': message, 'url': url})
 
 
-def user_page(request, email):
-    if any(x['email'] == email for x in users):
-        print(any(x['email'] == email for x in users))
-        return render(request, 'page_user.html')
+def user_page(request, name):
+    if any(x['name'] == name for x in users):
+        return render(request, 'page_user.html', context={'name': name})
     else:
-        print(any(x['email'] == email for x in users))
         return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
+
+
+def add_post(request):
+    global active_user
+    for i in users:
+        if active_user == i['name']:
+            pass
