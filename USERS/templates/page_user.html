@@ -7,5 +7,15 @@
 <body>
 <a href="{% url 'main_page' %}">Logout</a>
 <h1>Hello, {{ name }}!</h1>
+<p>Add post...</p>
+<form action="{{ url }}">
+    <label>Title</label>
+    <input type="text" name="title">
+    <br><br>
+    <label>Description</label>
+    <input type="text" name="description">
+    <br><br>
+    <button type="submit">Post it</button>
+</form>
 </body>
 </html>

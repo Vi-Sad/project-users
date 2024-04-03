@@ -3,17 +3,19 @@ from django.http import HttpResponse, HttpResponseNotFound
 
 # Create your views here.
 
-users = [{
-    'name': 'Victoria',
-    'email': 'sadovskaya.vicka@yandex.ru',
-    'password': 'pass-victoria-2024',
-    'posts': [],
-}, {
-    'name': 'Kseniya',
-    'email': 'k.sadovskaya2022@gmail.com@yandex.ru',
-    'password': 'pass-kseniya-2024',
-    'posts': [],
-}]
+users = [
+    {
+        'name': 'Victoria',
+        'email': 'sadovskaya.vicka@yandex.ru',
+        'password': 'pass-victoria-2024',
+    },
+    {
+        'name': 'Kseniya',
+        'email': 'k.sadovskaya2022@gmail.com@yandex.ru',
+        'password': 'pass-kseniya-2024',
+    },
+]
+posts = []
 active_user = None
 
 
@@ -35,7 +37,7 @@ def registration_check(request):
     email = request.GET['email']
     password = request.GET['password']
     if all([x['name'] != name for x in users]):
-        users.append({'name': name, 'email': email, 'password': password, 'posts': []})
+        users.append({'name': name, 'email': email, 'password': password})
         message = 'Success'
         url = 'http://127.0.0.1:8000/'
     else:
@@ -62,13 +64,17 @@ def login_check(request):
 
 def user_page(request, name):
     if any(x['name'] == name for x in users):
-        return render(request, 'page_user.html', context={'name': name})
+        url = f'http://127.0.0.1:8000/login/user/{name}/posts/'
+        return render(request, 'page_user.html', context={'name': name, 'url': url})
     else:
         return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
 
 
-def add_post(request):
-    global active_user
-    for i in users:
-        if active_user == i['name']:
-            pass
+def add_post(request, name):
+    title = request.GET['title']
+    description = request.GET['description']
+    if any(x['name'] == name for x in users):
+        posts.append({'name': name, 'title': title, 'description': description})
+        return render(request, 'add_post.html', context={'posts': posts})
+    else:
+        return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')

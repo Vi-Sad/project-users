@@ -9,4 +9,5 @@ urlpatterns = [
     path('login/', user.login, name='login'),
     path('login/check/', user.login_check, name='login_check'),
     path('login/user/<slug:name>/', user.user_page, name='user_page'),
+    path('login/user/<slug:name>/posts/', user.add_post, name='add_post'),
 ]
