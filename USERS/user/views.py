@@ -64,8 +64,7 @@ def login_check(request):
 
 def user_page(request, name):
     if any(x['name'] == name for x in users):
-        url = f'http://127.0.0.1:8000/login/user/{name}/posts/'
-        return render(request, 'page_user.html', context={'name': name, 'url': url})
+        return render(request, 'page_user.html', context={'name': name})
     else:
         return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
 
@@ -74,7 +73,8 @@ def add_post(request, name):
     title = request.GET['title']
     description = request.GET['description']
     if any(x['name'] == name for x in users):
+        url = f'http://127.0.0.1:8000/login/user/{name}/'
         posts.append({'name': name, 'title': title, 'description': description})
-        return render(request, 'add_post.html', context={'posts': posts})
+        return render(request, 'add_post.html', context={'posts': posts, 'url': url})
     else:
         return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
