@@ -17,5 +17,12 @@
     <br><br>
     <button type="submit">Post it</button>
 </form>
+<hr>
+<h3>Your posts:</h3>
+{% for i in posts %}
+{% if i.name == name %}
+<p>{{ i }}</p>
+{% endif %}
+{% endfor %}
 </body>
 </html>

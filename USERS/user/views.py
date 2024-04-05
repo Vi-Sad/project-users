@@ -5,14 +5,14 @@ from django.http import HttpResponse, HttpResponseNotFound
 
 users = [
     {
-        'name': 'Victoria',
-        'email': 'sadovskaya.vicka@yandex.ru',
-        'password': 'pass-victoria-2024',
+        'name': 'User_1',
+        'email': 'user_1@email.ru',
+        'password': 'pass_1',
     },
     {
-        'name': 'Kseniya',
-        'email': 'k.sadovskaya2022@gmail.com@yandex.ru',
-        'password': 'pass-kseniya-2024',
+        'name': 'User_2',
+        'email': 'user_2@email.ru',
+        'password': 'pass_2',
     },
 ]
 posts = []
@@ -20,7 +20,7 @@ active_user = None
 
 
 def index(request):
-    return render(request, 'index.html', {'users': users})
+    return render(request, 'index.html', {'users': users, 'posts': posts})
 
 
 def registration(request):
@@ -64,7 +64,7 @@ def login_check(request):
 
 def user_page(request, name):
     if any(x['name'] == name for x in users):
-        return render(request, 'page_user.html', context={'name': name})
+        return render(request, 'page_user.html', context={'name': name, 'posts': posts})
     else:
         return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
 
@@ -75,6 +75,6 @@ def add_post(request, name):
     if any(x['name'] == name for x in users):
         url = f'http://127.0.0.1:8000/login/user/{name}/'
         posts.append({'name': name, 'title': title, 'description': description})
-        return render(request, 'add_post.html', context={'posts': posts, 'url': url})
+        return render(request, 'add_post.html', context={'url': url})
     else:
         return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
