@@ -1,0 +1,20 @@
+{% extends 'page_user.html' %}
+
+{% block personal %}
+{% for i in users %}
+{% if i.name == name %}
+<p>Name: {{ i.name }}</p>
+<p>Email: {{ i.email }}</p>
+<p>Password: {{ i.password }}</p>
+{% endif %}
+{% endfor %}
+{% endblock personal %}
+
+{% block posts %}
+{% for i in posts %}
+{% if i.name == name %}
+<h4>Title: {{ i.title }}</h4>
+<p>Description: {{ i.description }}</p>
+{% endif %}
+{% endfor %}
+{% endblock posts %}
