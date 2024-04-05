@@ -9,13 +9,17 @@
 <a href="login">Login</a>
 <span>|</span>
 <a href="registration">Registration</a>
-<h3>All users:</h3>
-{% for i in users %}
-<p>{{ i }}</p>
-{% endfor %}
 <hr>
 <h3>All posts:</h3>
 {% for i in posts %}
+<p>* * *</p>
+<p>Author: {{ i.name }}</p>
+<h4>Title: {{ i.title }}</h4>
+<p>Description: {{ i.description }}</p>
+{% endfor %}
+<hr>
+<h3>All users:</h3>
+{% for i in users %}
 <p>{{ i }}</p>
 {% endfor %}
 </body>
