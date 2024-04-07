@@ -1,23 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseNotFound
 from .models import *
 
 # Create your views here.
 
-# posts = [
-#     {
-#         'name': 'User_1',
-#         'title': 'Lorem',
-#         'description': 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. '
-#                        'Iste in neque adipisci distinctio dolor quam!',
-#     },
-#     {
-#         'name': 'User_2',
-#         'title': 'Lorem (part 2)',
-#         'description': 'Continuation lorem. Lorem ipsum dolor sit amet consectetur adipisicing elit. '
-#                        'A hic non nam asperiores nihil adipisci ducimus!',
-#     }
-# ]
 active_user = None
 display_users = User.objects.all()
 posts = Post.objects.all()
