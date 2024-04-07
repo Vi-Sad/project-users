@@ -54,7 +54,7 @@ def login_check(request):
     global message, active_user
     email = request.GET['email']
     password = request.GET['password']
-    if any(x.email == email for x in display_users):
+    if any(x.email == email and x.password == password for x in display_users):
         for i in display_users:
             if i.email == email and i.password == password:
                 active_user = i.name
