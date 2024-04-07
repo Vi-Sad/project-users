@@ -15,14 +15,17 @@
 <h3>All posts:</h3>
 {% for i in posts %}
 <p>* * *</p>
-<p>Author: {{ i.name }}</p>
 <h4>Title: {{ i.title }}</h4>
 <p>Description: {{ i.description }}</p>
+<p>Author: {{ i.name }}</p>
 {% endfor %}
 <hr>
 <h3>All users:</h3>
 {% for i in users %}
-<p>{{ i }}</p>
+<p>* * *</p>
+<p>Name: {{ i.name }}</p>
+<p>Email: {{ i.email }}</p>
+<p>Password: {{ i.password }}</p>
 {% endfor %}
 </body>
 </html>
