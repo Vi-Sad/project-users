@@ -28,8 +28,11 @@ def registration_check(request):
     password = request.GET['password']
     if all([x.name != name for x in display_users]):
         User.objects.create(name=name, email=email, password=password)
-        message = 'Success'
+        message = 'Success! Restart the server for the changes to take effect'
         url = 'http://127.0.0.1:8000/'
+    elif name == '' or email == '' or password:
+        message = 'Error. Empty fields are not allowed'
+        url = 'http://127.0.0.1:8000/registration/'
     else:
         message = f'A user named "{name}" already exists'
         url = 'http://127.0.0.1:8000/registration/'
@@ -44,7 +47,7 @@ def login_check(request):
         for i in display_users:
             if i.email == email and i.password == password:
                 active_user = i.name
-        message = 'Success'
+        message = 'Success! Restart the server for the changes to take effect'
         url = f'http://127.0.0.1:8000/login/user/{active_user}/'
     else:
         url = 'http://127.0.0.1:8000/login/'
@@ -67,7 +70,7 @@ def add_post(request, name):
         if title == '' or description == '':
             message = 'Error. Empty fields are not allowed'
         else:
-            message = 'Success'
+            message = 'Success! Restart the server for the changes to take effect'
             Post.objects.create(name=name, title=title, description=description)
         return render(request, 'add_post.html', context={'url': url, 'message': message})
     else:
