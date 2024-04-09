@@ -26,13 +26,13 @@ def registration_check(request):
     name = request.POST['name']
     email = request.POST['email']
     password = request.POST['password']
-    if all([x.name != name for x in display_users]):
+    if name == '' or email == '' or password:
+        message = 'Error. Empty fields are not allowed'
+        url = 'http://127.0.0.1:8000/registration/'
+    elif all([x.name != name for x in display_users]):
         User.objects.create(name=name, email=email, password=password)
         message = 'Success! Restart the page for the changes to take effect'
         url = 'http://127.0.0.1:8000/'
-    elif name == '' or email == '' or password:
-        message = 'Error. Empty fields are not allowed'
-        url = 'http://127.0.0.1:8000/registration/'
     else:
         message = f'A user named "{name}" already exists'
         url = 'http://127.0.0.1:8000/registration/'
@@ -43,7 +43,10 @@ def login_check(request):
     global message, active_user
     email = request.POST['email']
     password = request.POST['password']
-    if any(x.email == email and x.password == password for x in display_users):
+    if email == '' or password == '':
+        message = 'Error. Empty fields are not allowed'
+        url = 'http://127.0.0.1:8000/login/'
+    elif any(x.email == email and x.password == password for x in display_users):
         for i in display_users:
             if i.email == email and i.password == password:
                 active_user = i.name
