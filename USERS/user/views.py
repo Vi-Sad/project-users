@@ -10,7 +10,7 @@ posts = Post.objects.all()
 
 
 def index(request):
-    return render(request, 'index.html', {'users': display_users, 'posts': posts})
+    return render(request, 'index.html', {'users': display_users.all(), 'posts': posts.all()})
 
 
 def registration(request):
@@ -23,12 +23,12 @@ def login(request):
 
 def registration_check(request):
     global message
-    name = request.GET['name']
-    email = request.GET['email']
-    password = request.GET['password']
+    name = request.POST['name']
+    email = request.POST['email']
+    password = request.POST['password']
     if all([x.name != name for x in display_users]):
         User.objects.create(name=name, email=email, password=password)
-        message = 'Success! Restart the server for the changes to take effect'
+        message = 'Success! Restart the page for the changes to take effect'
         url = 'http://127.0.0.1:8000/'
     elif name == '' or email == '' or password:
         message = 'Error. Empty fields are not allowed'
@@ -41,13 +41,13 @@ def registration_check(request):
 
 def login_check(request):
     global message, active_user
-    email = request.GET['email']
-    password = request.GET['password']
+    email = request.POST['email']
+    password = request.POST['password']
     if any(x.email == email and x.password == password for x in display_users):
         for i in display_users:
             if i.email == email and i.password == password:
                 active_user = i.name
-        message = 'Success! Restart the server for the changes to take effect'
+        message = 'Success!'
         url = f'http://127.0.0.1:8000/login/user/{active_user}/'
     else:
         url = 'http://127.0.0.1:8000/login/'
@@ -57,9 +57,10 @@ def login_check(request):
 
 def user_page(request, name):
     if any(x.name == name for x in display_users):
-        return render(request, 'info_user.html', context={'name': name, 'posts': posts})
+        return render(request, 'info_user.html', context={'name': name, 'posts': posts.all()})
     else:
-        return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
+        return HttpResponseNotFound('<style>body {background-color: black; color: white;}</style>'
+                                    '<h1>Error 404. Page not found</h1>')
 
 
 def add_post(request, name):
@@ -70,15 +71,18 @@ def add_post(request, name):
         if title == '' or description == '':
             message = 'Error. Empty fields are not allowed'
         else:
-            message = 'Success! Restart the server for the changes to take effect'
+            message = 'Success! Restart the page for the changes to take effect'
             Post.objects.create(name=name, title=title, description=description)
         return render(request, 'add_post.html', context={'url': url, 'message': message})
     else:
-        return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
+        return HttpResponseNotFound('<style>body {background-color: black; color: white;}</style>'
+                                    '<h1>Error 404. Page not found</h1>')
 
 
 def info_user(request, name):
     if any(x.name == name for x in display_users):
-        return render(request, 'info_user.html', context={'name': name, 'users': display_users, 'posts': posts})
+        return render(request, 'info_user.html',
+                      context={'name': name, 'users': display_users.all(), 'posts': posts.all()})
     else:
-        return HttpResponseNotFound('<h1>Error 404. Page not found</h1>')
+        return HttpResponseNotFound('<style>body {background-color: black; color: white;}</style>'
+                                    '<h1>Error 404. Page not found</h1>')

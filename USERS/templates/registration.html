@@ -8,7 +8,8 @@
 </head>
 <body>
 <h1>Registration</h1>
-<form action="{% url 'registration_check' %}">
+<form method="post" action="{% url 'registration_check' %}">
+    {% csrf_token %}
     <label>Name</label>
     <input name="name">
     <br><br>
