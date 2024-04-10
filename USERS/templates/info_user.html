@@ -15,6 +15,13 @@
 {% if i.name == name %}
 <h4>Title: {{ i.title }}</h4>
 <p>Description: {{ i.description }}</p>
+<a href="{% url 'edit_post' i.id %}">
+    <button>Edit</button>
+</a>
+<span>|</span>
+<a href="">
+    <button>Delete</button>
+</a>
 {% endif %}
 {% endfor %}
 {% endblock posts %}

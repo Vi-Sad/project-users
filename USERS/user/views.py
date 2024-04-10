@@ -82,6 +82,25 @@ def add_post(request, name):
                                     '<h1>Error 404. Page not found</h1>')
 
 
+def edit_post(request, post_id):
+    global active_user
+    for i in posts.all():
+        if i.id == post_id:
+            active_user = i.name
+    return render(request, 'edit_post.html', context={'posts': posts.all(), 'post_id': post_id, 'name': active_user})
+
+
+def edit_post_check(request, post_id):
+    title = request.POST.get('title')
+    description = request.POST.get('description')
+    if title == '' or description == '':
+        message = 'Error. Empty fields are not allowed'
+    else:
+        Post.objects.filter(id=post_id).update(title=title, description=description)
+        message = 'Success! Restart the page for the changes to take effect'
+    return render(request, 'edit_post_check.html', context={'name': active_user, 'message': message})
+
+
 def info_user(request, name):
     if any(x.name == name for x in display_users):
         return render(request, 'info_user.html',
