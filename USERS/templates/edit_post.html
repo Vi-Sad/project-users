@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit post</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+</head>
+<body>
+{% for i in posts %}
+{% if i.id == post_id %}
+<form method="post" action="{% url 'edit_post_check' post_id %}">
+    {% csrf_token %}
+    <label>Title</label>
+    <input name="title" value="{{ i.title }}">
+    <br><br>
+    <label>Description</label>
+    <input name="description" value="{{ i.description }}">
+    <br><br>
+    <button type="submit">Confirm</button>
+    <br><br>
+</form>
+{% endif %}
+{% endfor %}
+<a href="{% url 'user_page' name %}">
+    <button>Back</button>
+</a>
+</body>
+</html>
