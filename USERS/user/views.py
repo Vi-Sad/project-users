@@ -67,8 +67,8 @@ def user_page(request, name):
 
 
 def add_post(request, name):
-    title = request.GET['title']
-    description = request.GET['description']
+    title = request.POST.get('title')
+    description = request.POST.get('description')
     if any(x.name == name for x in display_users):
         url = f'http://127.0.0.1:8000/login/user/{name}/'
         if title == '' or description == '':
@@ -99,6 +99,11 @@ def edit_post_check(request, post_id):
         Post.objects.filter(id=post_id).update(title=title, description=description)
         message = 'Success! Restart the page for the changes to take effect'
     return render(request, 'edit_post_check.html', context={'name': active_user, 'message': message})
+
+
+def delete_post(request, post_id):
+    Post.objects.filter(id=post_id).delete()
+    return render(request, 'delete_post.html', context={'name': active_user})
 
 
 def info_user(request, name):

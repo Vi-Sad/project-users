@@ -9,7 +9,8 @@ urlpatterns = [
     path('login/', user.login, name='login'),
     path('login/check/', user.login_check, name='login_check'),
     path('login/user/<slug:name>/', user.info_user, name='user_page'),
-    path('login/post/add/', user.add_post, name='add_post'),
+    path('login/user/<slug:name>/post/add/', user.add_post, name='add_post'),
     path('login/post/edit/<int:post_id>/', user.edit_post, name='edit_post'),
     path('login/post/edit/<int:post_id>/check/', user.edit_post_check, name='edit_post_check'),
+    path('login/post/delete/<int:post_id>/', user.delete_post, name='delete_post'),
 ]
