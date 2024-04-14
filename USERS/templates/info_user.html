@@ -15,6 +15,10 @@
 {% if i.name == name %}
 <h4>Title: {{ i.title }}</h4>
 <p>Description: {{ i.description }}</p>
+<p>Date of publication: {{ i.date_publication }}</p>
+{% if i.date_change != i.date_publication %}
+    <p>Date of change: {{ i.date_change }}</p>
+{% endif %}
 <a href="{% url 'edit_post' i.id %}">
     <button>Edit</button>
 </a>

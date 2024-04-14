@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseNotFound
 from .models import *
+from datetime import datetime
 
 # Create your views here.
 
@@ -96,12 +97,16 @@ def edit_post_check(request, post_id):
     if title == '' or description == '':
         message = 'Error. Empty fields are not allowed'
     else:
-        Post.objects.filter(id=post_id).update(title=title, description=description)
+        Post.objects.filter(id=post_id).update(title=title, description=description, date_change=datetime.now())
         message = 'Success! Restart the page for the changes to take effect'
     return render(request, 'edit_post_check.html', context={'name': active_user, 'message': message})
 
 
 def delete_post(request, post_id):
+    global active_user
+    for i in posts:
+        if i.id == post_id:
+            active_user = i.name
     Post.objects.filter(id=post_id).delete()
     return render(request, 'delete_post.html', context={'name': active_user})
 
