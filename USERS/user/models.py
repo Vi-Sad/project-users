@@ -15,9 +15,9 @@ class User(models.Model):
 class Post(models.Model):
     objects = None
     name = models.CharField(max_length=20)
-    title = models.CharField(max_length=40)
-    description = models.CharField(max_length=300)
-    date_publication = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=1000)
+    date_publication = models.DateTimeField(auto_now_add=True)
     date_change = models.DateTimeField(auto_now=True)
 
     def __str__(self):

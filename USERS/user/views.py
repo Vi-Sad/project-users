@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseNotFound
-from .models import *
+from .models import User, Post
 from datetime import datetime
+from django.utils import timezone
 
 # Create your views here.
 
@@ -77,6 +78,7 @@ def add_post(request, name):
         else:
             message = 'Success! Restart the page for the changes to take effect'
             Post.objects.create(name=name, title=title, description=description)
+            Post.objects.filter(title=title).update(date_publication=datetime.now(), date_change=datetime.now())
         return render(request, 'add_post.html', context={'url': url, 'message': message})
     else:
         return HttpResponseNotFound('<style>body {background-color: black; color: white;}</style>'
