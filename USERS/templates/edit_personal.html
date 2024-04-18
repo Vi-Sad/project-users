@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal information</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+<p>{{ message }}</p>
+<a href="{% url 'user_page' name %}">
+    <button>Back</button>
+</a>
+</body>
+</html>

@@ -30,3 +30,12 @@
 {% endif %}
 {% endfor %}
 {% endblock posts %}
+
+{% block additional_information %}
+{% for i in personal %}
+{% if i.name == name %}
+<p>Status: {{ i.status }}</p>
+<p>Birthday: {{ i.birthday }}</p>
+{% endif %}
+{% endfor %}
+{% endblock additional_information %}

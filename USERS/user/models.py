@@ -22,3 +22,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class PersonalInformation(models.Model):
+    objects = None
+    name = models.CharField(max_length=20)
+    status = models.CharField(max_length=50, null=True, default=None)
+    birthday = models.DateField(null=True, default=None)
+
+    def __str__(self):
+        return self.name

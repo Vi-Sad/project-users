@@ -1,15 +1,18 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Your page</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
 </head>
 <body>
 <a href="{% url 'main_page' %}">Logout</a>
 <hr>
 <h1>Hello, {{ name }}!</h1>
+{% for i in personal %}
+<p>{{ i.status }}</p>
+{% endfor %}
 <p>Add post...</p>
 <form action="{% url 'add_post' name %}" method="post">
     {% csrf_token %}
@@ -21,10 +24,23 @@
     <br><br>
     <button type="submit">Post it</button>
 </form>
+<p>* * *</p>
+<p>To add personal data...</p>
+<form action="{% url 'personal_information' name %}" method="post">
+    {% csrf_token %}
+    {% for i in personal_information %}
+    <p>{{ i.label_tag }}</p>
+    <p>{{ i }}</p>
+    {% endfor %}
+    <button type="submit">Save</button>
+</form>
 <hr>
 <h3>Your information:</h3>
 {% block personal %}
 {% endblock personal %}
+<p>* * *</p>
+{% block additional_information %}
+{% endblock additional_information %}
 <hr>
 <h3>Your posts:</h3>
 {% block posts %}

@@ -1,14 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponseNotFound
-from .models import User, Post
+from .models import *
+from .forms import *
 from datetime import datetime
-from django.utils import timezone
 
 # Create your views here.
 
 active_user = None
 display_users = User.objects.all()
 posts = Post.objects.all()
+personal = PersonalInformation.objects.all()
 
 
 def index(request):
@@ -28,11 +29,12 @@ def registration_check(request):
     name = request.POST['name']
     email = request.POST['email']
     password = request.POST['password']
-    if name == '' or email == '' or password:
+    if len(name) == 0 or len(email) == 0 or len(password) == 0:
         message = 'Error. Empty fields are not allowed'
         url = 'http://127.0.0.1:8000/registration/'
     elif all([x.name != name for x in display_users]):
         User.objects.create(name=name, email=email, password=password)
+        PersonalInformation.objects.create(name=name, status=None, birthday=None)
         message = 'Success! Restart the page for the changes to take effect'
         url = 'http://127.0.0.1:8000/'
     else:
@@ -45,7 +47,7 @@ def login_check(request):
     global message, active_user
     email = request.POST['email']
     password = request.POST['password']
-    if email == '' or password == '':
+    if len(email) == 0 or len(password) == 0:
         message = 'Error. Empty fields are not allowed'
         url = 'http://127.0.0.1:8000/login/'
     elif any(x.email == email and x.password == password for x in display_users):
@@ -56,13 +58,15 @@ def login_check(request):
         url = f'http://127.0.0.1:8000/login/user/{active_user}/'
     else:
         url = 'http://127.0.0.1:8000/login/'
-        message = 'Invalid email or password'
+        message = f'Invalid email or password email={email}, pass={password}'
     return render(request, 'login_check.html', context={'message': message, 'url': url})
 
 
 def user_page(request, name):
     if any(x.name == name for x in display_users):
-        return render(request, 'info_user.html', context={'name': name, 'posts': posts.all()})
+        return render(request, 'info_user.html', context={'name': name, 'posts': posts.all(),
+                                                          'personal_information': AddPersonalInformation(),
+                                                          'personal': personal})
     else:
         return HttpResponseNotFound('<style>body {background-color: black; color: white;}</style>'
                                     '<h1>Error 404. Page not found</h1>')
@@ -96,7 +100,7 @@ def edit_post(request, post_id):
 def edit_post_check(request, post_id):
     title = request.POST.get('title')
     description = request.POST.get('description')
-    if title == '' or description == '':
+    if len(title) == 0 or len(description) == 0:
         message = 'Error. Empty fields are not allowed'
     else:
         Post.objects.filter(id=post_id).update(title=title, description=description, date_change=datetime.now())
@@ -116,7 +120,17 @@ def delete_post(request, post_id):
 def info_user(request, name):
     if any(x.name == name for x in display_users):
         return render(request, 'info_user.html',
-                      context={'name': name, 'users': display_users.all(), 'posts': posts.all()})
+                      context={'name': name, 'users': display_users.all(), 'posts': posts.all(),
+                               'personal_information': AddPersonalInformation(), 'personal': personal})
     else:
         return HttpResponseNotFound('<style>body {background-color: black; color: white;}</style>'
                                     '<h1>Error 404. Page not found</h1>')
+
+
+def personal_information(request, name):
+    global message
+    status = request.POST.get('status')
+    birthday = request.POST.get('birthday')
+    message = 'Success! Restart the page for the changes to take effect'
+    PersonalInformation.objects.filter(name=name).update(status=status, birthday=birthday)
+    return render(request, 'edit_personal.html', context={'message': message, 'name': name})
