@@ -45,8 +45,8 @@ def registration_check(request):
 
 def login_check(request):
     global message, active_user
-    email = request.POST['email']
-    password = request.POST['password']
+    email = request.POST.get('email')
+    password = request.POST.get('password')
     if len(email) == 0 or len(password) == 0:
         message = 'Error. Empty fields are not allowed'
         url = 'http://127.0.0.1:8000/login/'
@@ -128,9 +128,7 @@ def info_user(request, name):
 
 
 def personal_information(request, name):
-    global message
     status = request.POST.get('status')
     birthday = request.POST.get('birthday')
-    message = 'Success! Restart the page for the changes to take effect'
     PersonalInformation.objects.filter(name=name).update(status=status, birthday=birthday)
-    return render(request, 'edit_personal.html', context={'message': message, 'name': name})
+    return render(request, 'edit_personal.html', context={'name': name})
