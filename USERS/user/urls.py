@@ -13,5 +13,6 @@ urlpatterns = [
     path('login/post/edit/<int:post_id>/', user.edit_post, name='edit_post'),
     path('login/post/edit/<int:post_id>/check/', user.edit_post_check, name='edit_post_check'),
     path('login/post/delete/<int:post_id>/', user.delete_post, name='delete_post'),
-    path('login/user/<slug:name>/personal_information/', user.personal_information, name='personal_information'),
+    path('login/user/<slug:name>/status/', user.edit_status, name='status'),
+    path('login/user/<slug:name>/birthday/', user.edit_birthday, name='birthday'),
 ]

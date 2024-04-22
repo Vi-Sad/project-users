@@ -3,11 +3,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Personal information</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Birthday</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
 </head>
 <body>
-<p>Success! Restart the page for the changes to take effect</p>
+<p>{{ message }}</p>
 <a href="{% url 'user_page' name %}">
     <button>Back</button>
 </a>

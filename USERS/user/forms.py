@@ -1,21 +1,25 @@
-import random
 from django import forms
+from django.core.exceptions import ValidationError
+
 from .models import PersonalInformation
 
-personal = PersonalInformation.objects.all()
-for i in personal:
-    status = i.status
-    birthday = i.birthday
+
+def forbidden_brackets(status):
+    brackets = ['{', '}', '[', ']']
+    for i in brackets:
+        if i in status:
+            raise ValidationError('It is forbidden to set these brackets in your status')
+    return status
 
 
 class AddPersonalInformation(forms.ModelForm):
+    status = forms.CharField(validators=[forbidden_brackets])
+
     class Meta:
         model = PersonalInformation
         # fields = '__all__'
-        fields = ['status', 'birthday']
+        fields = ['status']
         widgets = {
-            'birthday': forms.TextInput(attrs={'type': 'date', 'name': 'birthday',
-                                               'value': f'{birthday.strftime("%Y-%m-%d")}'}),
-            'status': forms.TextInput(attrs={'name': 'status', 'value': f'{status}'})
+            'status': forms.TextInput(attrs={'name': 'status'})
         }
         required = False

@@ -3,10 +3,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit post</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <title>Status</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
 </head>
 <body>
+{% for i in personal_information %}
+{% if i.errors %}
+<p>{{ error.li_tag }}</p>
+{% endif %}
+{% endfor %}
 <p>{{ message }}</p>
 <a href="{% url 'user_page' name %}">
     <button>Back</button>

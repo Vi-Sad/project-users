@@ -26,15 +26,15 @@ def login(request):
 
 def registration_check(request):
     global message
-    name = request.POST['name']
-    email = request.POST['email']
+    name = request.POST.get('name')
+    email = request.POST.get('email')
     password = request.POST['password']
     if len(name) == 0 or len(email) == 0 or len(password) == 0:
         message = 'Error. Empty fields are not allowed'
         url = 'http://127.0.0.1:8000/registration/'
     elif all([x.name != name for x in display_users]):
         User.objects.create(name=name, email=email, password=password)
-        PersonalInformation.objects.create(name=name, status=None, birthday=None)
+        PersonalInformation.objects.create(name=name, status='no status')
         message = 'Success! Restart the page for the changes to take effect'
         url = 'http://127.0.0.1:8000/'
     else:
@@ -54,11 +54,11 @@ def login_check(request):
         for i in display_users:
             if i.email == email and i.password == password:
                 active_user = i.name
-        message = 'Success!'
+        message = 'Success! Restart the page for the changes to take effect'
         url = f'http://127.0.0.1:8000/login/user/{active_user}/'
     else:
+        message = f'Invalid email or password'
         url = 'http://127.0.0.1:8000/login/'
-        message = f'Invalid email or password email={email}, pass={password}'
     return render(request, 'login_check.html', context={'message': message, 'url': url})
 
 
@@ -127,8 +127,26 @@ def info_user(request, name):
                                     '<h1>Error 404. Page not found</h1>')
 
 
-def personal_information(request, name):
-    status = request.POST.get('status')
+def edit_status(request, name):
+    global status_current
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        form = AddPersonalInformation(request.POST)
+        if form.is_valid():
+            PersonalInformation.objects.filter(name=name).update(status=status)
+            message = f'Success! The status will be updated after the server is restarted'
+        else:
+            message = f'Error: {form.errors}'
+    else:
+        for i in personal:
+            if i.name == name:
+                status_current = i.status
+        message = f'Your current status: {status_current}'
+    return render(request, 'edit_status.html', context={'name': name, 'message': message})
+
+
+def edit_birthday(request, name):
     birthday = request.POST.get('birthday')
-    PersonalInformation.objects.filter(name=name).update(status=status, birthday=birthday)
-    return render(request, 'edit_personal.html', context={'name': name})
+    PersonalInformation.objects.filter(name=name).update(birthday=birthday)
+    message = 'Success! Birthday'
+    return render(request, 'edit_birthday.html', context={'name': name, 'message': message})

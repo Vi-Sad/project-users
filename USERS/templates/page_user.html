@@ -28,12 +28,11 @@
 </form>
 <p>* * *</p>
 <p>To add personal data...</p>
-<form action="{% url 'personal_information' name %}" method="post">
+<form method="post" action="{% url 'status' name %}" novalidate>
     {% csrf_token %}
-    {% for i in personal_information %}
-    <p>{{ i.label_tag }}</p>
-    <p>{{ i }}</p>
-    {% endfor %}
+    {{ personal_information.status.label_tag }}
+    {{ personal_information.status }}
+    {{ form.path }}
     <button type="submit">Save</button>
 </form>
 <hr>
