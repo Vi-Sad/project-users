@@ -145,8 +145,6 @@ def edit_status(request, name):
     return render(request, 'edit_status.html', context={'name': name, 'message': message})
 
 
-def edit_birthday(request, name):
-    birthday = request.POST.get('birthday')
-    PersonalInformation.objects.filter(name=name).update(birthday=birthday)
-    message = 'Success! Birthday'
-    return render(request, 'edit_birthday.html', context={'name': name, 'message': message})
+def view_user(request, name):
+    return render(request, 'view_user.html', context={'name': name, 'posts': posts, 'personal': personal,
+                                                      'users': display_users})

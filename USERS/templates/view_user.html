@@ -3,36 +3,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Online blog</title>
+    <title>User {{ name }}</title>
     <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body>
-<h1>Online blog users</h1>
-<a href="login">Login</a>
-<span>|</span>
-<a href="registration">Registration</a>
-<hr>
-<h3>All posts:</h3>
+<h1>Author: {{ name }}</h1>
+{% for i in personal %}
+{% if i.name == name %}
+<p>Status: {{ i.status }}</p>
+{% endif %}
+{% endfor %}
+{% for i in users %}
+{% if i.name == name %}
+<p>Date registration: {{ i.date_registration }}</p>
+{% endif %}
+{% endfor %}
+<h2>All posts:</h2>
 {% for i in posts %}
-<p>* * *</p>
+{% if i.name == name %}
 <h4>Title: {{ i.title }}</h4>
 <p>Description: {{ i.description }}</p>
-<p>Author: {{ i.name }}</p>
 <p>Date of publication: {{ i.date_publication }}</p>
 {% if i.date_change != i.date_publication %}
     <p>Date of change: {{ i.date_change }}</p>
 {% endif %}
-<a href="{% url 'view_user' i.name %}">
-    <button>View the user</button>
-</a>
-{% endfor %}
-<hr>
-<h3>All users:</h3>
-{% for i in users %}
 <p>* * *</p>
-<p>Name: {{ i.name }}</p>
-<p>Email: {{ i.email }}</p>
-<p>Password: {{ i.password }}</p>
+{% endif %}
 {% endfor %}
+<a href="{% url 'main_page' %}">
+    <button>Back</button>
+</a>
 </body>
 </html>
