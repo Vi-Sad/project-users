@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Online blog</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
 </head>
 <body>
 <h1>Online blog users</h1>
@@ -20,7 +20,7 @@
 <p>Author: {{ i.name }}</p>
 <p>Date of publication: {{ i.date_publication }}</p>
 {% if i.date_change != i.date_publication %}
-    <p>Date of change: {{ i.date_change }}</p>
+<p>Date of change: {{ i.date_change }}</p>
 {% endif %}
 <a href="{% url 'view_user' i.name %}">
     <button>View the user</button>
